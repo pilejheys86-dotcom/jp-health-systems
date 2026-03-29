@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="MedicalRecordKeeper">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/MedicalRecordKeeper/dist/MedicalRecordKeeper.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
