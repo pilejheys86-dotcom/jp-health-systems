@@ -1,48 +1,107 @@
-JHEYS TRISTAN KEITH A. PILE
-BSIT-MWA ITE242
-JP HEALTH SYSTEMS
+# JP Health Systems - Medical Record Keeper
 
-The JP Health Systems - Medical Record Keeper is a comprehensive Java-based desktop application designed to efficiently manage and organize medical records 
-for students (Senior High School and College) and personnel within an educational institution. Featuring a user-friendly Graphical User Interface (GUI), this 
-system provides robust Create, Read, Update, and Delete (CRUD) functionalities, ensuring data integrity and accessibility. Leveraging Object-Oriented Programming (OOP) 
-principles, the application offers tailored data entry forms and viewing options for each client type, streamlining record management and enhancing user experience.
+A Java Swing desktop application for managing medical records in educational institutions. It supports three client types — Senior High School students, College students, and Personnel — with full CRUD operations, physical examination tracking, and activity logging.
 
-Functionality and Features:
+## Features
 
-**Secure Login:**
-    * Provides a secure login interface with username and password fields, a "show password" option, and clear "OK" and "Cancel" actions.
-    * Implements basic credential validation.
-**Centralized Dashboard:**
-    * Offers a main dashboard with an activity log, displaying real-time updates on record additions, modifications, and deletions.
-    * Activity log includes: Date, Time, Name, Client Type (Senior High School, College, Personnel), and Status.
-**Comprehensive Record Management (CRUD):**
-    **Create:**
-        * Allows users to add new records with specific forms for Senior High School, College, and Personnel.
-        * Forms include detailed personal information, medical history, and physical examination sections.
-        * Dynamic form elements (combo boxes, check boxes, date pickers) enhance data entry accuracy.
-        * Automated age calculation from birthdate.
-    **Read/View:**
-        * Presents client profiles in an easily navigable format, organized alphabetically and by client type.
-        * Displays all stored information, including personal details, medical history, and physical examination results.
-    **Update/Edit:**
-        * Enables users to modify existing records, ensuring data accuracy and up-to-dateness.
-    **Delete:**
-        * Provides the ability to remove records when necessary, with appropriate confirmation prompts.
-**Client-Specific Data Entry:**
-    * Tailored forms for Senior High School, College, and Personnel, capturing relevant information for each client type.
-    **Personnel Form Example:**
-       * Includes radio buttons to specify whether the personnel is "Faculty" or "Non-teaching."
-       * Enforces a specific format for personnel ID numbers through validation.
-**Medical History and Physical Examination:**
-   * Includes detailed sections for medical history (allergies, asthma, etc.) and physical examination (BP, PR, weight, etc.).
-   * Gyne/Obstetrical option is disabled for male clients.
-   * Physical examination date and time are automatically generated.
-**Data Validation and Security:**
-   * Implements data validation (RegEx, error handling) to ensure data integrity.
-   * Provides error message boxes for user feedback.
-   * Exit confirmation prompt.
-**Object-Oriented Design:**
-   * Utilizes OOP principles to create modular and maintainable code.
-   * Uses separate classes for each client type.
-   * Uses abstract parent classes, and child classes that override parent functionality.
-   * Encapsulates data and methods within classes.
+### Authentication
+- Login screen with username and password fields
+- Show/hide password toggle
+- Branded login panel with institutional logo
+
+### Dashboard
+- Left-side navigation panel with quick access to Activity Log, View Records, and Add Record
+- Card-based layout that switches between views seamlessly
+
+### Activity Log
+- Tracks all record operations (create, update, delete) with timestamps
+- Displays date, time, person name, client type, and action performed
+- Supports refreshing and clearing the log
+
+### Record Management
+- **View Records** — Browse all records or filter by tab: Senior High School, College, or Personnel
+- **Add Record** — Create new records using type-specific forms
+- **Edit Record** — Update existing records with all fields pre-filled
+- **Delete Record** — Remove records with confirmation
+- Records are displayed as tiles sorted alphabetically by surname
+
+### Client Types
+
+| Type | Specific Fields |
+|------|----------------|
+| **Senior High School** | Strand (ABM, HUMSS, STEM), Grade Level (11–12) |
+| **College** | Department (SEAT, SEAS, STHM, SBA), Program (14 courses), Year Level (1st–4th) |
+| **Personnel** | Faculty or Non-teaching classification |
+
+### Record Form (4 Tabs)
+
+**1. Personal Information**
+- Full name, ID number, address (barangay, municipality, province, country)
+- Contact number, birthday with auto-calculated age, sex, marital status, religion
+- Emergency contact details
+- COVID-19 vaccination status and vaccine type
+
+**2. Medical History**
+- Checkbox-based tracking for 11 conditions: allergies, asthma, tuberculosis, diabetes, heart ailment, hypertension, kidney disease, gynecological/obstetrical issues, smoking, alcohol use, and previous hospitalization
+- Gynecological checkbox auto-disabled for male clients
+
+**3. Physical Examination**
+- Record vitals: blood pressure (systolic/diastolic), pulse rate, oxygen saturation, weight, temperature
+- Text fields for chief complaint, medical attendant, diagnosis, and treatment
+
+**4. Examination History**
+- Table view of all past physical exams for a client
+- Ability to delete individual exam entries
+
+### Data Validation
+- Regex-based validation on names, ID numbers, contact numbers, and other fields
+- ID format enforcement per client type (e.g., `20XX-XXXXXXX` for students, `22-XXXX` for personnel)
+- Contact number format: `XXX-XXX-XXXX`
+- Required field checks with descriptive error dialogs
+
+## Technical Details
+
+| Aspect | Detail |
+|--------|--------|
+| Language | Java 22 |
+| GUI Framework | Swing |
+| Build System | Ant (NetBeans project) |
+| Persistence | Java Object Serialization (`medical_records.dat`) |
+| Entry Point | `medicalrecordkeeper.MedicalRecordKeeper` |
+| Source Files | 12 classes |
+
+### Architecture
+- **Singleton** — `DatabaseManager` ensures a single instance manages all data access
+- **Inheritance** — `Person` base class extended by `CollegeStudent`, `SeniorHighStudent`, and `Personnel`
+- **Abstract Form** — `BaseRecordForm` provides shared form logic; subclasses add type-specific fields
+- **Serialization** — Records and activity logs are persisted as serialized Java objects to a local `.dat` file
+
+### Project Structure
+
+```
+MedicalRecordKeeper/
+├── src/medicalrecordkeeper/
+│   ├── MedicalRecordKeeper.java      # Login UI + BaseRecordForm abstract class
+│   ├── Dashboard.java                # Main dashboard with navigation and views
+│   ├── DatabaseManager.java          # Singleton data manager (serialization)
+│   ├── Person.java                   # Base class for all client types
+│   ├── CollegeStudent.java           # College student model
+│   ├── SeniorHighStudent.java        # Senior high student model
+│   ├── Personnel.java                # Personnel model
+│   ├── PhysicalExamEntry.java        # Physical exam data model
+│   ├── ActivityLogEntry.java         # Activity log entry model
+│   ├── CollegeStudentForm.java       # College student record form
+│   ├── SeniorHighSchoolForm.java     # Senior high student record form
+│   ├── PersonnelForm.java           # Personnel record form
+│   └── resources/                    # Logo images
+├── build.xml                         # Ant build configuration
+└── medical_records.dat               # Serialized data file
+```
+
+## How to Run
+
+1. Open the project in NetBeans or any IDE that supports Ant builds
+2. Build and run `medicalrecordkeeper.MedicalRecordKeeper` as the main class
+3. Alternatively, run the built JAR from `dist/MedicalRecordKeeper.jar`
+
+PileJTK
